@@ -2,14 +2,31 @@
 <html>
 	<head>
 		<script>
-			function calc_points(s) {
+			function streak(i) {
+				let sum = 0;
+				for(let k=1;k<i;k++) {
+					sum += streakBonus(k);
+				}
+				return sum;
+			}
+
+			function streakBonus(i) {
+				if(i < 2) return 0;
+				else return Math.min(750, 350 + (i - 2) * 100);
+			}
+
+			function calc_points(s, avg) {
 				let time = parseInt(s);
+				let avgStream = parseInt(avg);
 
 				let pleb = time * 30 / 15.0 + time * 10 / 5.0;
 				let sub = time * 60 / 15.0 + time * 20 / 5.0;
 
 				document.getElementById('points_pleb').innerHTML = pleb + ' points';
 				document.getElementById('points_sub').innerHTML = sub + ' points';
+
+				document.getElementById('points_pleb_streaks').innerHTML = (pleb + streak(time / avgStream)) + ' points';
+				document.getElementById('points_sub_streaks').innerHTML = (sub + streak(time / avgStream)) + ' points';
 			}
 
 			function calc_time(s) {
@@ -18,25 +35,36 @@
 				let pleb = points / (30 / 15.0 + 10 / 5.0);
 				let sub = points / (60 / 15.0 + 20 / 5.0);
 
-				document.getElementById('watchtime_pleb').innerHTML = pleb + ' mins ~ ' + (pleb / 60).toFixed(2) + ' hrs' ;
-				document.getElementById('watchtime_sub').innerHTML = sub + ' mins ~ ' + (sub / 60).toFixed(2) + ' hrs';
+				document.getElementById('watchtime_pleb').innerHTML = pleb + ' mins ~ ' + (pleb / 60.0).toFixed(2) + ' hrs' ;
+				document.getElementById('watchtime_sub').innerHTML = sub + ' mins ~ ' + (sub / 60.0).toFixed(2) + ' hrs';
+
 			}
 		</script>
 	</head>
 	<body>
-		<div style="display: inline;">
-			<h2>By time</h2>
-			<label for="watchtime">Watchtime (mins): </label>
-			<input id="watchtime" onchange="calc_points(watchtime.value)" type="number" min="0">
-			<p>Points(pleb) ~ <span id="points_pleb"></span></p>
-			<p>Points(sub) ~ <span id="points_sub"></span></p>
+		<div>
+			<label for="avg_stream">Average stream duration (mins): </label>
+			<input id="avg_stream" onchange="calc_points(watchtime.value, avg_stream.value)" type="number" min="0" max="1440">
 		</div>
-		<div style="display: inline;">
-			<h2>By points</h2>
-			<label for="points">Points: </label>
-			<input id="points" onchange="calc_time(points.value)" type="number" min="0">
-			<p>Watchtime(pleb) : <span id="watchtime_pleb"></span></p>
-			<p>Watchtime(sub) : <span id="watchtime_sub"></span></p>
+		<div style="display: flex; flex-wrap: wrap; margin: 10px">
+			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid;">
+				<h2>By time</h2>
+				<label for="watchtime">Watchtime (mins): </label>
+				<input id="watchtime" onchange="calc_points(watchtime.value, avg_stream.value)" type="number" min="0">
+				<p>Points(pleb) ~ <span id="points_pleb"></span></p>
+				<p>Points(sub) ~ <span id="points_sub"></span></p>
+				<br>
+				<h3>With streaks</h3>
+				<p>Points(pleb) ~ <span id="points_pleb_streaks"></span></p>
+				<p>Points(sub) ~ <span id="points_sub_streaks"></span></p>
+			</div>
+			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid;">
+				<h2>By points</h2>
+				<label for="points">Points: </label>
+				<input id="points" onchange="calc_time(points.value)" type="number" min="0">
+				<p>Watchtime(pleb) ~ <span id="watchtime_pleb"></span></p>
+				<p>Watchtime(sub) ~ <span id="watchtime_sub"></span></p>
+			</div>
 		</div>
 	</body>
 </html>
