@@ -16,6 +16,9 @@
 			}
 
 			function calc_points(s, avg) {
+				if(avg == 0) {
+					return;
+				}
 				let time = parseInt(s);
 				let avgStream = parseInt(avg);
 
@@ -44,10 +47,10 @@
 	<body>
 		<div>
 			<label for="avg_stream">Average stream duration (mins): </label>
-			<input id="avg_stream" onchange="calc_points(watchtime.value, avg_stream.value)" type="number" min="0" max="1440">
+			<input id="avg_stream" onchange="calc_points(watchtime.value, avg_stream.value)" type="number" min="10" max="1440">
 		</div>
 		<div style="display: flex; flex-wrap: wrap; margin: 10px">
-			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid;">
+			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid; padding: 10px;">
 				<h2>By time</h2>
 				<label for="watchtime">Watchtime (mins): </label>
 				<input id="watchtime" onchange="calc_points(watchtime.value, avg_stream.value)" type="number" min="0">
@@ -58,7 +61,7 @@
 				<p>Points(pleb) ~ <span id="points_pleb_streaks"></span></p>
 				<p>Points(sub) ~ <span id="points_sub_streaks"></span></p>
 			</div>
-			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid;">
+			<div style="flex-grow: 0; margin: 10px; border-color: black; border-width: 1px; border-style: solid; padding: 10px;">
 				<h2>By points</h2>
 				<label for="points">Points: </label>
 				<input id="points" onchange="calc_time(points.value)" type="number" min="0">
